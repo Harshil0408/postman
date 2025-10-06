@@ -1,8 +1,12 @@
 import { currentUser } from "@/modules/authentication/actions";
 import Header from "@/modules/layout/components/header";
+import { initializeWorkspace } from "@/modules/workspaces/actions";
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
+  const workspace = await initializeWorkspace();
   const user = await currentUser();
+
+  console.log(workspace)
 
   if (!user) {
     return <div>User not found</div>;

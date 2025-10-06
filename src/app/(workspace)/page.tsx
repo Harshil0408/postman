@@ -1,12 +1,48 @@
-import { currentUser } from "@/modules/authentication/actions";
-import UserButton from "@/modules/authentication/components/user-button";
+"use client";
 
-export default async function Home() {
-  const user = await currentUser();
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable";
+import TabbedSidebar from "@/modules/collections/components/sidebar";
+import { useWorkspaceStore } from "@/modules/layout/store";
+import { useGetWorkspaceById } from "@/modules/workspaces/hooks/workspaces";
+import { Loader } from "lucide-react";
+
+const Page = () => {
+  const { selectedWorkspace } = useWorkspaceStore();
+
+  const { data: currentWorkspace, isPending } = useGetWorkspaceById(
+    selectedWorkspace?.id ?? ""
+  );
+
+  if (isPending) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full">
+        <Loader className="animate-spin h-6 w-6 text-indigo-500" />
+      </div>
+    );
+  }
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center">
-      <UserButton user={user}></UserButton>
-    </div>
+    <ResizablePanelGroup direction="horizontal">
+      <ResizablePanel defaultSize={65} minSize={40}>
+        <h1>Request Playground</h1>
+      </ResizablePanel>
+      <ResizableHandle withHandle />
+      <ResizablePanel
+        defaultSize={35}
+        maxSize={40}
+        minSize={25}
+        className="flex"
+      >
+        <div className="flex-1">
+          <TabbedSidebar currentWorkspace={currentWorkspace} />
+        </div>
+      </ResizablePanel>
+    </ResizablePanelGroup>
   );
-}
+};
+
+export default Page;

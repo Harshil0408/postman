@@ -95,7 +95,9 @@ const TabbedSidebar = ({ currentWorkspace }: Props) => {
         );
       default:
         return (
-          <div className="p-4 text-zinc-400">Select a tab to view content</div>
+          <div className="p-4 text-zinc-400">
+            This tab is under construction! Please co-operate.
+          </div>
         );
     }
   };
